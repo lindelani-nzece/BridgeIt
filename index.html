@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#007aff" />
+  <link rel="manifest" href="./manifest.json" />
+  <title>Bridgelt</title>
+  <style>
+    body { font-family: -apple-system, sans-serif; max-width: 500px; margin: 40px auto; padding: 0 20px; }
+    input { padding: 10px; font-size: 16px; width: 70%; }
+    button { padding: 10px 15px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Bridgelt</h2>
+  <input id="itemInput" type="text" placeholder="Type something..." />
+  <button id="addBtn">Add</button>
+  <ul id="itemList"></ul>
+
+  <script src="./storage.js"></script>
+  <script src="./logic.js"></script>
+  <script src="./ui.js"></script>
+</body>
+</html>
