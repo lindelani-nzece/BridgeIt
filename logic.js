@@ -1,42 +1,55 @@
-const AppLogic = (() => {
-  let state = { items: [] };
+export const initialState = {
+  items: []
+};
 
-  function setItems(initialItems) {
-    state.items = Array.isArray(initialItems) ? [...initialItems] : [];
-    return getState();
-  }
+export function createItem(text, id) {
+  const cleanText = typeof text === 'string' ? text.trim() : '';
+  if (!cleanText) return null;
 
-  function getState() {
-    return { ...state };
-  }
+  return {
+    id: id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    text: cleanText,
+    done: false
+  };
+}
 
-  function addItem(text) {
-    const clean = text.trim();
-    if (!clean) return getState();
-    state.items = [...state.items, { id: Date.now(), text: clean, done: false }];
-    return getState();
-  }
+export function addItem(state, text, id) {
+  const currentItems = Array.isArray(state?.items) ? state.items : [];
+  const nextItem = createItem(text, id);
+  if (!nextItem) return { ...state, items: currentItems };
 
-  function toggleItem(id) {
-    state.items = state.items.map(item =>
+  return {
+    ...state,
+    items: [...currentItems, nextItem]
+  };
+}
+
+export function toggleItem(state, id) {
+  const currentItems = Array.isArray(state?.items) ? state.items : [];
+  return {
+    ...state,
+    items: currentItems.map((item) =>
       item.id === id ? { ...item, done: !item.done } : item
-    );
-    return getState();
-  }
+    )
+  };
+}
 
-  // === PWA-READY GUARDRAIL ===
-  function auditPortability() {
-    const forbidden = ['document.', 'window.', 'localStorage', 'sessionStorage', 'alert(', 'innerHTML'];
-    const codeText = [setItems, getState, addItem, toggleItem].map(fn => fn.toString()).join('\n');
-    const violations = forbidden.filter(word => codeText.includes(word));
+export function deleteItem(state, id) {
+  const currentItems = Array.isArray(state?.items) ? state.items : [];
+  return {
+    ...state,
+    items: currentItems.filter((item) => item.id !== id)
+  };
+}
 
-    if (violations.length > 0 && typeof document !== 'undefined') {
-      const banner = document.createElement('div');
-      banner.style.cssText = 'background:#ff3b30;color:#fff;padding:10px;font-family:sans-serif;font-size:14px;position:fixed;top:0;left:0;right:0;z-index:9999;';
-      banner.textContent = `⚠️ PORTABILITY WARNING in logic.js: Avoid browser-only APIs (${violations.join(', ')}). Move to ui.js or storage.js!`;
-      document.body.prepend(banner);
-    }
-  }
+export function clearCompleted(state) {
+  const currentItems = Array.isArray(state?.items) ? state.items : [];
+  return {
+    ...state,
+    items: currentItems.filter((item) => !item.done)
+  };
+}
 
-  return { setItems, getState, addItem, toggleItem, auditPortability };
-})();
+export function remainingCount(state) {
+  return (state?.items ?? []).filter((item) => !item.done).length;
+}

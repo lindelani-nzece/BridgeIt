@@ -1,0 +1,15 @@
+# BridgeIt
+
+> BridgeIt is a clean, structured pattern for building personal micro-apps that you can tailor to yourself and port to native platforms later if they grow. Under the hood, they are standard Progressive Web Apps (PWAs)—so they run instantly from your Home Screen without a developer license or App Store, and work offline out of the box.
+
+Every BridgeIt app consists of an exact 8-file bundle (`index.html`, `styles.css`, `logic.js`, `storage.js`, `ui.js`, `manifest.json`, `sw.js`, `icon.svg`) with zero external dependencies and three isolated layers:
+- Brain (`logic.js`): Pure state and transition functions with zero DOM, storage, or network globals.
+- Bridge (`storage.js`): Namespaced local persistence (`bridgeit:<app-slug>:v1`) and external API/server sync.
+- Face (`ui.js`, `index.html`, `styles.css`) + Shell (`manifest.json`, `sw.js`, `icon.svg`): Standalone PWA interface and offline caching.
+
+## Core Files
+
+- [Specification](https://lindelani-nzece.github.io/BridgeIt/SPEC.md): Complete BridgeIt v1.0 protocol rules, 8-file contract, and layer boundaries.
+- [Agent Instructions](https://lindelani-nzece.github.io/BridgeIt/AGENTS.md): Concise generation and verification rules for AI coding agents.
+- [Validator Script](https://lindelani-nzece.github.io/BridgeIt/validate.mjs): Node.js script (`node validate.mjs <dir>`) that checks bundle completeness, `logic.js` purity, and manifest validity.
+- [Reference App](https://lindelani-nzece.github.io/BridgeIt/index.html): Live working 8-file BridgeIt starter micro-app.

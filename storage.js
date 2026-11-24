@@ -1,22 +1,28 @@
-const StorageAdapter = (() => {
-  const KEY = 'bridgelt_items';
+export const STORAGE_KEY = 'bridgeit:list:v1';
 
-  function loadItems() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) {
-      return [];
-    }
+export function loadState(fallbackState) {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return fallbackState;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed?.items) ? { items: parsed.items } : fallbackState;
+  } catch {
+    return fallbackState;
   }
+}
 
-  function saveItems(items) {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(items));
-    } catch (e) {
-      console.error('Storage failed:', e);
-    }
+export function saveState(state) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: state.items ?? [] }));
+  } catch (err) {
+    console.warn('BridgeIt storage save failed:', err);
   }
+}
 
-  return { loadItems, saveItems };
-})();
+export function clearState() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (err) {
+    console.warn('BridgeIt storage clear failed:', err);
+  }
+}
